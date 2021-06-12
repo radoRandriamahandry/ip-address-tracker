@@ -6,9 +6,9 @@
     <h1 class="text-lg font-semibold text-gray-100">IP Address Tracker</h1>
     <form class="flex items-center w-1/3 h-12 rounded-xl">
       <input
-        v-model="Ip"
+        v-model="ipAddress"
         type="text"
-        name="ip"
+        name="ipAddress"
         placeholder="Search for any IP address or domain"
         class="flex-1 h-full pl-4 text-sm rounded-l-lg outline-none  focus:ring-2 focus:ring-inset focus:ring-black"
       />
@@ -30,7 +30,7 @@
         </svg>
       </button>
     </form>
-    <IpDetails />
+    <IpDetails v-if="ipAddress" :ip-address="ipAddress" />
   </div>
 </template>
 
@@ -43,9 +43,10 @@ export default {
     IpDetails,
   },
   setup() {
+    // TODO: send the input fields as a prop to the ipDetails components
     const {
       query,
-      result: Ip,
+      result: ipAddress,
       callApi,
     } = useAPI(async () => {
       const res = await axios.get("https://api.ipify.org")
@@ -54,7 +55,7 @@ export default {
 
     callApi()
 
-    return { query, Ip, callApi }
+    return { query, ipAddress, callApi }
   },
 }
 </script>
