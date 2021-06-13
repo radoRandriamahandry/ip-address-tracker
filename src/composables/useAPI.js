@@ -16,9 +16,8 @@ const useAPI = (getResults) => {
     hasError.value = false
     try {
       // getResults depends on the type of query ex: graphl query.
-      // The user return whatever informations he needs
+      // The user return whatever informations he needs from the api call
       result.value = await getResults(query.value)
-      console.log(result.value)
     } catch (error) {
       console.log(error.message)
       hasError.value = true

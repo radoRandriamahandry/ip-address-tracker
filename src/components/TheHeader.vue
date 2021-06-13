@@ -4,11 +4,14 @@
     style="background-image: url('/src/assets/images/pattern-bg.png')"
   >
     <h1 class="text-lg font-semibold text-gray-100">IP Address Tracker</h1>
-    <form class="flex items-center w-1/3 h-12 rounded-xl">
+    <form
+      class="flex items-center w-1/3 h-12 rounded-xl"
+      @submit.prevent="handleSubmit"
+    >
       <input
-        v-model="ipAddress"
+        v-model="inputValue"
         type="text"
-        name="ipAddress"
+        name="inputValue"
         placeholder="Search for any IP address or domain"
         class="flex-1 h-full pl-4 text-sm rounded-l-lg outline-none  focus:ring-2 focus:ring-inset focus:ring-black"
       />
@@ -30,32 +33,42 @@
         </svg>
       </button>
     </form>
-    <IpDetails v-if="ipAddress" :ip-address="ipAddress" />
+    <IpDetails v-if="ipDetails" :ip-details="ipDetails" />
   </div>
 </template>
 
 <script>
 import IpDetails from "./IpDetails.vue"
-import axios from "axios"
-import useAPI from "../composables/useAPI"
+import getIpAddress from "../composables/getIpAddress"
+import getIpDetails from "../composables/getIpDetails"
+import { ref, reactive } from "vue"
 export default {
   components: {
     IpDetails,
   },
   setup() {
-    // TODO: send the input fields as a prop to the ipDetails components
-    const {
-      query,
-      result: ipAddress,
-      callApi,
-    } = useAPI(async () => {
-      const res = await axios.get("https://api.ipify.org")
-      return res.data
-    })
+    const inputValue = ref("")
+    const ipDetails = reactive({})
 
-    callApi()
+    // TODO: handle loading and error status
+    const handleSubmit = async () => {
+      const { result: tempIpDetails } = await getIpDetails(inputValue)
 
-    return { query, ipAddress, callApi }
+      ipDetails.ip = tempIpDetails.value.ip
+      ipDetails.location = tempIpDetails.value.location
+      ipDetails.timezone = tempIpDetails.value.timezone
+      ipDetails.isp = tempIpDetails.value.isp
+    }
+
+    const initIpDetails = async () => {
+      const { result: ipAddress } = await getIpAddress()
+      inputValue.value = ipAddress.value
+      handleSubmit()
+    }
+
+    initIpDetails()
+
+    return { inputValue, ipDetails, handleSubmit }
   },
 }
 </script>
