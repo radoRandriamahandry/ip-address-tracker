@@ -2,22 +2,23 @@ import { ref } from "@vue/reactivity"
 
 /**
  * @desc Reusable composable for calling an API
- * @param {function} getResults
- * @returns {}
+ * @returns {result, isLoading, hasError, callApi}
  */
-const useAPI = (getResults) => {
+const useAPI = () => {
   const isLoading = ref(false)
   const hasError = ref(false)
-  const query = ref("")
   const result = ref("")
 
-  const callApi = async () => {
+  /**
+   * Call an API depending of the getResults function
+   * getResults definne the API to call and the result to get from it
+   * @param {Function} getResults
+   */
+  const callApi = async (getResults) => {
     isLoading.value = true
     hasError.value = false
     try {
-      // getResults depends on the type of query ex: graphl query.
-      // The user return whatever informations he needs from the api call
-      result.value = await getResults(query.value)
+      result.value = await getResults()
     } catch (error) {
       console.log(error.message)
       hasError.value = true
@@ -26,7 +27,7 @@ const useAPI = (getResults) => {
     }
   }
 
-  return { query, result, isLoading, hasError, callApi }
+  return { result, isLoading, hasError, callApi }
 }
 
 export default useAPI

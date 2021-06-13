@@ -18,11 +18,15 @@ export default {
   components: {
     IpDetailsItem,
   },
+  // TODO: get the loading and error status as a props
   props: {
     ipDetails: {
       type: Object,
       required: true,
     },
+  },
+  setup() {
+    // TODO: emit an event when there is an error on the ipDetails.hasError
   },
 }
 </script>
