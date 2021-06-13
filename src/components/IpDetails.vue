@@ -28,16 +28,21 @@ export default {
     },
   },
   setup(props) {
-    console.log("ip adress ", props.ipAddress)
     const { result, callApi } = useAPI(async () => {
       const res = await axios.get(
         `https://geo.ipify.org/api/v1?apiKey=at_8nUSSlHRBQlZqt01f8vItI42yV2Ro&ipAddress=${props.ipAddress}`
       )
-      console.log("res : ", res.data.location)
       // TODO: formate the location value
+      let locations = [
+        res.data.location.country,
+        res.data.location.city,
+        res.data.location.postalCode,
+      ]
+      locations = locations.filter((location) => location !== "").join(", ")
+
       const ipDetails = {
         ip: props.ipAddress,
-        location: `${res.data.location.country}, ${res.data.location.city}, ${res.data.location.postalCode}`,
+        location: locations,
         timezone: `UTC${res.data.location.timezone}`,
         ips: res.data.isp,
       }
