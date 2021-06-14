@@ -15,7 +15,10 @@
         name="inputValue"
         :placeholder="placeholder"
         class="flex-1 h-full pl-4 text-sm rounded-l-lg outline-none  focus:ring-2 focus:ring-inset focus:ring-black"
-        :class="[getIpHasError && 'border border-red-400 placeholder-red-400']"
+        :class="[
+          (ipDetails.hasError || getIpHasError) &&
+            'ring-inset ring-2 ring-red-600 placeholder-red-600',
+        ]"
       />
       <!-- TODO: handle loading and error -->
       <!-- TODO: show message -->
@@ -62,22 +65,7 @@ export default {
     const getIpIsLoading = ref(false)
     const getIpHasError = ref(false)
 
-    /** DOM manipulation */
-    // Display different placeholder depending on the getIpHasError value
-    const placeholder = computed(() => {
-      // TODO: handle error here and pass it down to the ipDetails component
-      if (getIpIsLoading.value && !getIpHasError.value) {
-        return "Getting your current IP address ..."
-      }
-
-      return !getIpHasError.value
-        ? "Search for any IP address or domain"
-        : "Could not get your ip address"
-    })
-    /** END DOM manipulation */
-
-    // TODO: handle loading and error status
-    // TODO: send the loading and error status to the component
+    const placeholder = ref("Enter an IP address")
 
     /**
      * @desc get the ip address details using the geo.ipify.org API
@@ -85,20 +73,28 @@ export default {
     const handleSubmit = async () => {
       const { result, isLoading, hasError, callApi } = useAPI()
 
-      // the API call details is define inside the getIpDetails function
-      await callApi(async () => {
-        return await getIpDetails(inputValue.value)
-      })
+      // TODO: manage error here and reset ipDetails value
+      if (!inputValue.value) {
+        ipDetails.isLoading = false
+        ipDetails.hasError = true
+        placeholder.value = "IP address is empty"
+        throw new Error("IP address is empty")
+      } else {
+        // the API call details is define inside the getIpDetails function
+        await callApi(async () => {
+          return await getIpDetails(inputValue.value)
+        })
 
-      // SET the ipDetails value
-      ipDetails.ip = result.value.ip
-      ipDetails.location = result.value.location
-      ipDetails.timezone = result.value.timezone
-      ipDetails.isp = result.value.isp
-      // SET the error and loading status for the ipDetails component
-      // TODO: handle error when request failed or bad request
-      ipDetails.isLoading = isLoading.value
-      ipDetails.hasError = hasError.value
+        // SET the ipDetails value
+        ipDetails.ip = result.value.ip
+        ipDetails.location = result.value.location
+        ipDetails.timezone = result.value.timezone
+        ipDetails.isp = result.value.isp
+        // SET the error and loading status for the ipDetails component
+        // TODO: handle error when request failed or bad request
+        ipDetails.isLoading = isLoading.value
+        ipDetails.hasError = hasError.value
+      }
     }
 
     const initIpDetails = async () => {
