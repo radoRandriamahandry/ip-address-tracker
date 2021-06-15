@@ -1,5 +1,5 @@
 <template>
-  <div class="relative w-1/2">
+  <div class="relative z-10 w-1/2">
     <div
       v-if="!ipDetails.hasError"
       class="absolute inset-0 grid grid-cols-4 py-8 bg-white divide-x rounded-lg  h-36"
