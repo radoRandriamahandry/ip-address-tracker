@@ -16,7 +16,7 @@
         :placeholder="placeholder"
         class="flex-1 h-full pl-4 text-sm rounded-l-lg outline-none  focus:ring-2 focus:ring-inset focus:ring-black"
         :class="[
-          (ipDetails.hasError || getIpHasError) &&
+          (ipDetails.hasError || ipAddressHasError) &&
             'ring-inset ring-2 ring-red-600 placeholder-red-600',
         ]"
       />
@@ -25,12 +25,12 @@
       <button
         type="submit"
         class="h-full px-4 bg-black rounded-r-lg hover:bg-opacity-70 group"
-        :disabled="getIpIsLoading"
+        :disabled="ipAddressIsLoading"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           class="w-6 h-6 text-gray-100 stroke-current"
-          :class="[getIpIsLoading && 'text-gray-600']"
+          :class="[ipAddressIsLoading && 'text-gray-600']"
           viewBox="0 0 20 20"
           fill="currentColor"
         >
@@ -51,7 +51,7 @@ import IpDetails from "./IpDetails.vue"
 import useAPI from "../composables/useAPI"
 import getIpDetails from "../composables/getIpDetails"
 import axios from "axios"
-import { ref, reactive, computed } from "vue"
+import { ref, reactive } from "vue"
 
 export default {
   components: {
@@ -62,8 +62,8 @@ export default {
     const inputValue = ref("")
     const ipDetails = reactive({})
 
-    const getIpIsLoading = ref(false)
-    const getIpHasError = ref(false)
+    const ipAddressIsLoading = ref(false)
+    const ipAddressHasError = ref(false)
 
     const placeholder = ref("Enter an IP address")
 
@@ -80,17 +80,14 @@ export default {
         placeholder.value = "IP address is empty"
         throw new Error("IP address is empty")
       } else {
-        // the API call details is define inside the getIpDetails function
         await callApi(async () => {
           return await getIpDetails(inputValue.value)
         })
 
-        // SET the ipDetails value
         ipDetails.ip = result.value.ip
         ipDetails.location = result.value.location
         ipDetails.timezone = result.value.timezone
         ipDetails.isp = result.value.isp
-        // SET the error and loading status for the ipDetails component
         // TODO: handle error when request failed or bad request
         ipDetails.isLoading = isLoading.value
         ipDetails.hasError = hasError.value
@@ -98,18 +95,16 @@ export default {
     }
 
     const initIpDetails = async () => {
-      const { result, isLoading, hasError, callApi } = useAPI()
+      const { result, isLoading, hasError, callApi: getIpAddress } = useAPI()
 
-      // GET the current IP address using the ipify API using the useAPI composable
-      await callApi(async () => {
+      await getIpAddress(async () => {
         const res = await axios.get("https://api.ipify.org")
         return res.data
       })
 
-      // SET the ip address value, error and loading status
       inputValue.value = result.value
-      getIpIsLoading.value = isLoading.value
-      getIpHasError.value = hasError.value
+      ipAddressIsLoading.value = isLoading.value
+      ipAddressHasError.value = hasError.value
 
       handleSubmit()
     }
@@ -120,8 +115,8 @@ export default {
       inputValue,
       ipDetails,
       handleSubmit,
-      getIpIsLoading,
-      getIpHasError,
+      ipAddressIsLoading,
+      ipAddressHasError,
       placeholder,
     }
   },
