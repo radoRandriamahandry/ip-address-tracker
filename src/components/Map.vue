@@ -1,11 +1,10 @@
 <template>
-  <!-- TODO: create a loading spinner -->
-  <div id="mapId" ref="mapContainer" class="z-0"></div>
+  <div ref="mapContainer" class="z-0"></div>
 </template>
 
 <script>
 import mapboxgl from "mapbox-gl"
-import { onMounted, watch, ref } from "vue"
+import { onMounted, ref } from "vue"
 import position from "../store/position"
 export default {
   setup() {
@@ -27,9 +26,9 @@ export default {
       setMap(longitude.value, latitude.value)
     })
 
-    watch([longitude, latitude], () => {
-      setMap(longitude.value, latitude.value)
-    })
+    // watch([longitude, latitude], () => {
+    //   setMap(longitude.value, latitude.value)
+    // })
 
     return { mapContainer }
   },
