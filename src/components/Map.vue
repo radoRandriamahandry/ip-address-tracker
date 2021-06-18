@@ -14,21 +14,25 @@ export default {
     const setMap = (longitude, latitude) => {
       mapboxgl.accessToken =
         "pk.eyJ1Ijoib2RhciIsImEiOiJja3B4cW9hanowaTdzMndvYmg4NmRyNmZkIn0.7q5iGPlja3EYQ1VUO81A9A"
+
       const map = new mapboxgl.Map({
         container: mapContainer.value,
         style: "mapbox://styles/mapbox/streets-v11",
         center: [longitude, latitude],
         zoom: 15,
       })
+
+      // Wait for the map to be loaded before adding marker
+      setTimeout(() => {
+        const marker = new mapboxgl.Marker()
+          .setLngLat([longitude, latitude])
+          .addTo(map)
+      }, 1500)
     }
 
     onMounted(() => {
       setMap(longitude.value, latitude.value)
     })
-
-    // watch([longitude, latitude], () => {
-    //   setMap(longitude.value, latitude.value)
-    // })
 
     return { mapContainer }
   },

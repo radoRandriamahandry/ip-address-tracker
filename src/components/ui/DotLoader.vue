@@ -1,7 +1,9 @@
 <template>
   <div class="grid place-items-center">
     <div class="flex items-baseline gap-2 dot-loader">
-      <span class="text-lg font-semibold text-gray-400">Waiting for data</span>
+      <span class="text-lg font-semibold text-gray-400"
+        >Waiting for postion data to be available</span
+      >
       <span class="w-1 h-1 bg-gray-400 rounded-full animate-bounce"></span>
       <span class="w-1 h-1 bg-gray-400 rounded-full animate-bounce"></span>
       <span class="w-1 h-1 bg-gray-400 rounded-full animate-bounce"></span>
