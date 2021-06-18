@@ -1,14 +1,15 @@
 <template>
   <div
-    class="grid gap-5 pt-10 pb-16 bg-cover place-items-center"
+    class="grid gap-5 px-4 pt-5 pb-32 bg-cover  sm:pb-16 sm:pt-10 place-items-center"
     style="background-image: url('/src/assets/images/pattern-bg.png')"
   >
-    <h1 class="text-lg font-semibold text-gray-100">IP Address Tracker</h1>
+    <h1 class="text-xl font-semibold text-gray-100 sm:text-lg">
+      IP Address Tracker
+    </h1>
     <form
-      class="flex items-center w-1/3 h-12 rounded-xl"
+      class="flex items-center w-full h-12 max-w-md rounded-xl"
       @submit.prevent="handleSubmit"
     >
-      <!-- TODO: handle error -->
       <input
         v-model="inputValue"
         type="text"
@@ -20,8 +21,7 @@
             'ring-inset ring-2 ring-red-600 placeholder-red-600',
         ]"
       />
-      <!-- TODO: handle loading and error -->
-      <!-- TODO: show message -->
+
       <button
         type="submit"
         class="h-full px-4 bg-black rounded-r-lg hover:bg-opacity-70 group"

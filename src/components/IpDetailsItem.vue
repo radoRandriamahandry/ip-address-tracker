@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col gap-1 px-4">
+  <div class="flex flex-col px-4 md:gap-1">
     <span class="text-xs font-semibold text-gray-400 uppercase">{{
       title
     }}</span>
@@ -16,7 +16,7 @@
         <!-- animate-pulse the child instead of the parent element -->
         <div class="h-full bg-gray-200 rounded-lg animate-pulse"></div>
       </div>
-      <span v-else class="text-lg font-semibold text-gray-800">{{
+      <span v-else class="text-lg font-bold text-gray-800 md:font-semibold">{{
         value
       }}</span>
     </transition>

@@ -1,10 +1,9 @@
 <template>
-  <div class="relative z-10 w-1/2">
+  <div class="relative z-10 w-full max-w-[800px]">
     <div
       v-if="!ipDetails.hasError"
-      class="absolute inset-0 grid grid-cols-4 py-8 bg-white divide-x rounded-lg  h-36"
+      class="absolute inset-0 grid gap-2 py-4 text-center bg-white rounded-lg  sm:grid-cols-2 md:grid-rows-1 sm:divide-x md:grid-cols-4 sm:grid-rows-2 h-60 sm:h-32"
     >
-      <!-- TODO: Handle loading status, use skeleton -->
       <IpDetailsItem
         title="ip address"
         :value="ipDetails.ip"

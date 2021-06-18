@@ -24,7 +24,7 @@ export default {
 
       // Wait for the map to be loaded before adding marker
       setTimeout(() => {
-        const marker = new mapboxgl.Marker()
+        const marker = new mapboxgl.Marker({ color: "#000000" })
           .setLngLat([longitude, latitude])
           .addTo(map)
       }, 1500)
